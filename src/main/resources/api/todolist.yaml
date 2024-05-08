@@ -1,0 +1,287 @@
+openapi: 3.0.0
+info:
+  title: To-Do-List Apis
+  description:  To-Do-List Apis
+  version: 1.0.1
+servers:
+  - url: http://localhost:8085/todolist
+    description: Local machine
+paths:
+  /task:
+    post:
+      tags:
+        - Tasks
+      description: Create a new task
+      operationId: addTask
+      requestBody:
+        description:  add Task Details
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddTaskRequest'
+      responses:
+        '200':
+          description: Task creation response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddTaskResponse'
+        '400':
+          description: Validation errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Account creation request not found
+        '500':
+          description: Internal server error
+    get:
+      tags:
+        - Tasks
+      description: Get Tasks by Id
+      operationId: getTaskDetails
+      parameters:
+        - name: taskId
+          in: query
+          description: task Id
+          required: false
+          schema:
+            type: string
+        - name: dueDateCrossed
+          in: query
+          description: dueDateCrossed
+          required: false
+          schema:
+            type: string
+        - name: priority
+          in: query
+          description: priority
+          required: false
+          schema:
+            type: string
+        - name: userId
+          in: query
+          description: UserId
+          required: true
+          schema:
+            type: string
+        - name: pageNo
+          in: query
+          description: PageNo
+          required: false
+          schema:
+            type: string
+        - name: fetchCount
+          in: query
+          description: fetchCount
+          required: false
+          schema:
+            type: string
+        - name: status
+          in: query
+          description: status
+          required: false
+          schema:
+            type: string
+
+
+
+      responses:
+        '200':
+          description: Offer Details Search response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TasksSearchResponse'
+        '404':
+          description:  Offer Details not Found
+
+  /task/{taskId}:
+    put:
+      tags:
+        - Tasks
+      description: Update the Task using TaskId
+      operationId: updateTaskDetails
+      parameters:
+        - name: taskId
+          in: path
+          description: taskId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description:  Update Task Details
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTaskRequest'
+      responses:
+        '200':
+          description: Update Task Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateTaskResponse'
+        '404':
+          description:  User Details not Found
+  /user:
+    post:
+      tags:
+        - Users
+      description: Create a new task
+      operationId: addUser
+      requestBody:
+        description:  add User Details
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddUser'
+      responses:
+        '200':
+          description: User creation response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Validation errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Account creation request not found
+        '500':
+          description: Internal server error
+
+
+components:
+  schemas:
+    AddTaskRequest:
+      type: object
+      properties:
+        taskName:
+          type: string
+        description:
+          type: string
+        priority:
+          type: string
+        deadLine:
+          type: string
+        user_id:
+          type: string
+    AddTaskResponse:
+      type: object
+      properties:
+        taskId:
+          type: string
+        taskName:
+          type: string
+        description:
+          type: string
+        priority:
+          type: string
+        deadLine:
+          type: string
+        status:
+          type: string
+    UpdateTaskRequest:
+      type: object
+      properties:
+        taskName:
+          type: string
+        status:
+          type: string
+        description:
+          type: string
+        priority:
+          type: string
+        deadLine:
+          type: string
+        user_id:
+          type: string
+    UpdateTaskResponse:
+      type: object
+      properties:
+        taskId:
+          type: string
+        taskName:
+          type: string
+        description:
+          type: string
+        priority:
+          type: string
+        deadLine:
+          type: string
+        status:
+          type: string
+    AddUser:
+      type: object
+      properties:
+        userName:
+          type: string
+        mobile:
+          type: string
+
+    UserResponse:
+      type: object
+      properties:
+        name:
+          type: string
+        phone:
+          type: string
+        status:
+          type: string
+        userId:
+          type: string
+    TasksSearchResponse:
+      type: object
+      properties:
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskResponse'
+        nextPage:
+          type: integer
+    TaskResponse:
+      type: object
+      properties:
+        taskId:
+          type: string
+        taskName:
+          type: string
+        description:
+          type: string
+        priority:
+          type: string
+        deadLine:
+          type: string
+        status:
+          type: string
+
+
+
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        errorDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+    ErrorDetail:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        field:
+          type: string

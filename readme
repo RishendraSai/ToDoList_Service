@@ -1,0 +1,7 @@
+To Run this application
+First run the Mvn Clean install cmd to load the Api spec from open api generator
+Add the db name and password in application.properties
+create the db name as to_do_list with scheme todolist
+
+then Start the application
+Application will start  in localhost :8089 with context path -/todolist
